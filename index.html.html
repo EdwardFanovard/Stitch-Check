@@ -1,0 +1,1373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stitch check: will your logo embroider?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#E7EBF2; --panel:#F8FAFD; --ink:#131C36; --ink2:#4A5677; --line:#C6CEDF; --line2:#DCE2EE;
+  --denim:#22336E; --thread:#E8A200; --okband:#9BD7B7;
+  --on:#fff; --ok:#14724A; --ok-bg:#DAF1E5; --warn:#8F5400; --warn-bg:#FAEBC6; --bad:#AE202D; --bad-bg:#F9D9DC; --note:#2A4AA0; --note-bg:#DDE6FA;
+  --display:'Bricolage Grotesque','Trebuchet MS',system-ui,sans-serif;
+  --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page:#0E1424; --panel:#161F36; --ink:#E8ECF7; --ink2:#A2AECB; --line:#2E3A5C; --line2:#222D4A;
+    --denim:#8FA6F0; --on:#0E1424; --thread:#F2B41F; --okband:#1F6B4A;
+    --ok:#66D3A0; --ok-bg:#12382A; --warn:#F1C15F; --warn-bg:#40300E; --bad:#FF8B95; --bad-bg:#45181D; --note:#9DB5FF; --note-bg:#1B2A55;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#0E1424; --panel:#161F36; --ink:#E8ECF7; --ink2:#A2AECB; --line:#2E3A5C; --line2:#222D4A;
+  --denim:#8FA6F0; --on:#0E1424; --thread:#F2B41F; --okband:#1F6B4A;
+  --ok:#66D3A0; --ok-bg:#12382A; --warn:#F1C15F; --warn-bg:#40300E; --bad:#FF8B95; --bad-bg:#45181D; --note:#9DB5FF; --note-bg:#1B2A55;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--page);color:var(--ink);font:400 15px/1.5 var(--body);-webkit-text-size-adjust:100%}
+button,input,select{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em;line-height:1.15}
+p{margin:0}
+.wrap{max-width:1200px;margin:0 auto;padding:22px 18px 60px}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+header.top h1{font-size:clamp(30px,5vw,48px);font-weight:700}
+header.top p{color:var(--ink2);max-width:46ch;margin-top:6px}
+.grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.side{display:flex;flex-direction:column;gap:16px}
+@media (min-width:901px){.side{position:sticky;top:16px}}
+.card h2{font-size:18px;margin-bottom:12px}
+label.f{display:block;font-weight:500;font-size:13px;color:var(--ink2);margin:12px 0 5px}
+select,input[type=number],input[type=text]{width:100%;height:40px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}
+select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink2) 50%),linear-gradient(135deg,var(--ink2) 50%,transparent 50%);background-position:calc(100% - 17px) 17px,calc(100% - 12px) 17px;background-size:5px 5px;background-repeat:no-repeat;padding-right:30px}
+:focus-visible{outline:3px solid var(--thread);outline-offset:2px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-weight:500}
+.btn:hover{border-color:var(--denim)}
+.btn.pri{background:var(--denim);border-color:var(--denim);color:var(--on)}
+.btn.sm{height:32px;padding:0 12px;font-size:13px}
+.hint{font-size:13px;color:var(--ink2)}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-top:12px;cursor:pointer}
+.chk input{margin-top:3px;accent-color:var(--denim)}
+
+/* slider with workable band */
+.sl{position:relative;height:28px;margin-top:10px}
+.sl input[type=range]{position:absolute;inset:0;width:100%;height:28px;margin:0;background:transparent;-webkit-appearance:none;appearance:none}
+.sl input[type=range]::-webkit-slider-runnable-track{background:transparent;height:28px}
+.sl input[type=range]::-moz-range-track{background:transparent;height:28px}
+.sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:3px;border-radius:50%;background:var(--denim);border:3px solid var(--panel);box-shadow:0 0 0 1px var(--denim)}
+.sl input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--denim);border:3px solid var(--panel);box-shadow:0 0 0 1px var(--denim)}
+
+/* empty state: a running-stitch border */
+.empty{border:2.5px dashed var(--thread);border-radius:18px;min-height:460px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:32px;background:var(--panel)}
+.empty.drag{background:var(--note-bg);border-style:solid}
+.empty h2{font-size:clamp(22px,3vw,30px);max-width:20ch}
+.empty p{color:var(--ink2);max-width:44ch}
+.btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* preview */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:12px}
+.tablist{display:flex;gap:4px;background:var(--line2);padding:3px;border-radius:999px}
+.tab{border:0;background:transparent;height:32px;padding:0 14px;border-radius:999px;cursor:pointer;font-weight:500;color:var(--ink2)}
+.tab[aria-selected="true"]{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.swatches{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--ink2)}
+.swatches button{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.swatches button[aria-pressed="true"]{border-color:var(--thread);box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--thread)}
+.stage{border-radius:10px;border:1px solid var(--line);display:flex;justify-content:center;align-items:center;padding:12px;background:var(--line2)}
+.stage.checker{background-color:#fff;background-image:linear-gradient(45deg,#e6e9f0 25%,transparent 25%,transparent 75%,#e6e9f0 75%),linear-gradient(45deg,#e6e9f0 25%,transparent 25%,transparent 75%,#e6e9f0 75%);background-size:16px 16px;background-position:0 0,8px 8px}
+.stage canvas{max-width:100%;max-height:520px;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:13px;color:var(--ink2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.dims{font-size:13px;color:var(--ink2);margin-top:8px}
+
+/* verdict */
+.results{display:flex;flex-direction:column;gap:16px}
+.verdict{display:flex;gap:14px;align-items:flex-start;border-radius:14px;padding:18px;border:1px solid}
+.verdict.ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
+.verdict.warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn)}
+.verdict.bad{background:var(--bad-bg);color:var(--bad);border-color:var(--bad)}
+.verdict svg{flex:none;width:30px;height:30px;margin-top:2px}
+.verdict h2{font-size:clamp(22px,3vw,28px);margin:0 0 4px;color:inherit}
+.verdict p{color:var(--ink)}
+.verdict .vt{flex:1}
+
+.metrics{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;padding:0}
+.metrics>div{padding:16px 18px;border-left:1px solid var(--line)}
+.metrics>div:first-child{border-left:0}
+@media (max-width:760px){.metrics{grid-template-columns:1fr 1fr}.metrics>div{border-left:0;border-top:1px solid var(--line)}.metrics>div:nth-child(-n+2){border-top:0}.metrics>div:nth-child(even){border-left:1px solid var(--line)}}
+.metrics .k{font-size:13px;color:var(--ink2)}
+.metrics .v{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.15;font-variant-numeric:tabular-nums;margin-top:2px}
+.metrics .big .v{font-size:clamp(34px,5vw,46px)}
+.metrics .s{font-size:13px;color:var(--ink2);margin-top:2px}
+
+.bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line2);margin:8px 0 10px}
+.bar span{display:block;height:100%}
+
+.plist{list-style:none;margin:0;padding:0}
+.crow{display:grid;grid-template-columns:34px 1fr auto auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--line2)}
+.crow:first-child{border-top:0}
+.crow .sw{width:34px;height:34px;border-radius:8px;border:1px solid rgba(0,0,0,.25)}
+.crow b{font-weight:600;font-variant-numeric:tabular-nums}
+.crow .m span{display:block;font-size:13px;color:var(--ink2)}
+.crow .cs{font-variant-numeric:tabular-nums;font-weight:500;text-align:right}
+.crow.off .sw,.crow.off .m,.crow.off .cs{opacity:.4}
+.crow label{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--ink2);cursor:pointer}
+.crow input{accent-color:var(--denim)}
+
+.tips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.tip{border:1px solid var(--line);border-left-width:5px;border-radius:10px;padding:12px 14px;background:var(--panel);display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.tip .tt{flex:1 1 320px}
+.tip h3{font-size:16px;margin-bottom:3px}
+.tip p{color:var(--ink2);font-size:14px}
+.tip.bad{border-left-color:var(--bad)}.tip.bad h3{color:var(--bad)}
+.tip.warn{border-left-color:var(--warn)}.tip.warn h3{color:var(--warn)}
+.tip.note{border-left-color:var(--note)}.tip.note h3{color:var(--note)}
+.tip.ok{border-left-color:var(--ok)}.tip.ok h3{color:var(--ok)}
+
+.mg{height:30px;width:auto;margin-top:6px;padding:0 24px 0 8px;font-size:12px;background-position:calc(100% - 13px) 12px,calc(100% - 8px) 12px}
+.prow{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line2)}
+.prow:first-child{border-top:0}
+.prow .sw{width:34px;height:34px;border-radius:8px;border:1px solid rgba(0,0,0,.25)}
+.prow .ph{font-size:14px;color:var(--ink2)}
+.prow .ph b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pp{list-style:none;margin:6px 0 0;padding:0;font-size:14px;color:var(--ink2)}
+.pp li{margin-top:5px}.pp b{color:var(--ink);font-weight:600}
+.calib{font-size:14px}
+.calib .row2{grid-template-columns:1fr auto;align-items:end;margin-top:8px}
+.status{min-height:20px;font-size:13px;color:var(--ink2);margin-top:8px}
+.hidden{display:none!important}
+.sr{position:absolute;left:-9999px}
+footer{margin-top:30px;font-size:13px;color:var(--ink2);max-width:80ch}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Stitch check</h1>
+      <p>Drop in a logo. Find out if it will embroider, how many stitches it takes at your size, and what to fix.</p>
+    </div>
+    <button class="btn sm" id="themeBtn" type="button" aria-label="Switch light or dark theme">Theme</button>
+  </header>
+
+  <div class="grid">
+    <aside class="side">
+      <section class="card" aria-labelledby="h-size">
+        <h2 id="h-size">Size</h2>
+
+        <div class="row2">
+          <div><label class="f" for="wIn">Width (in)</label><input type="number" id="wIn" min="0.2" step="0.05" inputmode="decimal"></div>
+          <div><label class="f" for="hIn">Height (in)</label><input type="number" id="hIn" min="0.2" step="0.05" inputmode="decimal"></div>
+        </div>
+        <div class="sl" id="slWrap"><input type="range" id="wRange" min="10" max="200" step="1" aria-label="Width slider"></div>
+              </section>
+
+      <section class="card">
+        <h2>Logo</h2>
+        <p class="hint" id="fname">No logo loaded yet.</p>
+        <div class="btns" style="justify-content:flex-start;margin-top:10px">
+          <button class="btn pri" type="button" id="pick">Choose file</button>
+          <input type="file" id="file" accept="image/*,.svg" class="sr" aria-label="Logo file">
+        </div>
+        <label class="chk"><input type="checkbox" id="ignoreBg" checked><span>Remove white background</span></label>
+      </section>
+    </aside>
+
+    <main>
+      <div class="empty" id="empty">
+        <h2>Drop a logo here to check it</h2>
+        <p>PNG, JPG, WebP or SVG. Flat artwork on a transparent or plain background gives the most accurate read. You can also paste an image.</p>
+        <div class="btns">
+          <button class="btn pri" type="button" id="pick2">Choose file</button>
+          <button class="btn" type="button" id="sampleA">Try a clean logo</button>
+          <button class="btn" type="button" id="sampleB">Try a problem logo</button>
+        </div>
+        <p class="status" id="msg" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="results hidden" id="results">
+        <section class="card" aria-label="Preview">
+          <div class="tabs">
+            <div class="tablist" role="tablist" aria-label="Preview type">
+              <button class="tab" role="tab" data-view="stitch" aria-selected="true">Stitch preview</button>
+              <button class="tab" role="tab" data-view="map" aria-selected="false">Feasibility map</button>
+              <button class="tab" role="tab" data-view="orig" aria-selected="false">Original</button>
+            </div>
+            <div class="swatches" id="fabSw" role="group" aria-label="Preview fabric color"></div>
+          </div>
+          <div class="stage" id="stage"><canvas id="cv" role="img" aria-label="Preview of the logo as embroidery"></canvas></div>
+          <div class="legend" id="legend"></div>
+          <p class="dims" id="dims"></p>
+          <p class="status" id="msg2" role="status" aria-live="polite"></p>
+        </section>
+
+        <div class="verdict" id="verdict"></div>
+
+        <section class="card metrics" id="metrics" aria-label="Key numbers"></section>
+
+        <section class="card" aria-labelledby="h-types">
+          <h2 id="h-types">Where the stitches go</h2>
+          <div class="bar" id="typeBar"></div>
+          <div class="legend" id="typeLegend"></div>
+          <p class="hint" id="typeNote" style="margin-top:8px"></p>
+        </section>
+
+        <section class="card" aria-labelledby="h-plan">
+          <h2 id="h-plan">Digitizing plan</h2>
+          <p class="hint" style="margin-bottom:8px">How a digitizer would build this in Wilcom EmbroideryStudio, in stitching order. The tool names match its Auto-Digitizing tools.</p>
+          <ul class="plist" id="planList"></ul>
+        </section>
+
+        <section class="card" aria-labelledby="h-col">
+          <h2 id="h-col">Thread colors</h2>
+          <p class="hint" style="margin-bottom:8px">Untick a color to leave it as bare fabric. The stitch count updates.</p>
+          <p class="hint" id="openNote" style="margin-bottom:8px"></p>
+          <ul class="plist" id="palette"></ul>
+        </section>
+
+        <section aria-labelledby="h-tips">
+          <h2 id="h-tips" style="margin:4px 0 10px">What to change</h2>
+          <ul class="tips" id="tips"></ul>
+        </section>
+
+        <div class="btns" style="justify-content:flex-start">
+          <button class="btn" type="button" id="copy">Copy summary</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer>Estimates come from analysing pixels: colours, line thickness, letter heights and area, then applying stitch densities measured from real DST files and the structure of Wilcom EmbroideryStudio stitch types. Real counts still depend on how a digitizer builds each file, so treat the number as a planning estimate.</footer>
+</div>
+
+<script>
+const Core = (function () {
+'use strict';
+
+/* Wilcom default satin Auto Spacing (EmbroideryStudio reference manual, Satin auto-spacing):
+   column width in mm -> row spacing in mm at 100% density. Normal thread adds +0.01 mm. */
+const SATIN_W = [0.10, 0.50, 1.00, 1.50, 2.00, 3.00, 4.00, 5.00, 6.00, 7.00, 8.00];
+const SATIN_S = [0.54, 0.51, 0.49, 0.47, 0.46, 0.42, 0.40, 0.37, 0.36, 0.34, 0.34];
+function satinPreset(w) {
+  if (w <= SATIN_W[0]) return SATIN_S[0] + 0.01;
+  for (let i = 1; i < SATIN_W.length; i++) if (w <= SATIN_W[i]) { const f = (w - SATIN_W[i - 1]) / (SATIN_W[i] - SATIN_W[i - 1]); return SATIN_S[i - 1] + f * (SATIN_S[i] - SATIN_S[i - 1]) + 0.01; }
+  return SATIN_S[SATIN_S.length - 1] + 0.01;
+}
+const TATAMI_DEFAULT = 0.40;   /* Wilcom default tatami row spacing, mm */
+
+/* ---------- colour helpers ---------- */
+const LIN = new Float64Array(256);
+for (let i = 0; i < 256; i++) { const c = i / 255; LIN[i] = c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+const _o = [0, 0, 0];
+function rgb2lab(r, g, b, o) {
+  const R = LIN[r], G = LIN[g], B = LIN[b];
+  const x = (0.4124564 * R + 0.3575761 * G + 0.1804375 * B) / 0.95047;
+  const y = 0.2126729 * R + 0.7151522 * G + 0.0721750 * B;
+  const z = (0.0193339 * R + 0.1191920 * G + 0.9503041 * B) / 1.08883;
+  const fx = x > 0.008856 ? Math.cbrt(x) : 7.787 * x + 16 / 116;
+  const fy = y > 0.008856 ? Math.cbrt(y) : 7.787 * y + 16 / 116;
+  const fz = z > 0.008856 ? Math.cbrt(z) : 7.787 * z + 16 / 116;
+  o[0] = 116 * fy - 16; o[1] = 500 * (fx - fy); o[2] = 200 * (fy - fz);
+}
+function labDist(p, q) { return Math.sqrt((p.L - q.L) * (p.L - q.L) + (p.a - q.a) * (p.a - q.a) + (p.b - q.b) * (p.b - q.b)); }
+function hash(n) {
+  n = n | 0; n = (n ^ 61) ^ (n >>> 16); n = (n + (n << 3)) | 0; n = n ^ (n >>> 4);
+  n = Math.imul(n, 0x27d4eb2d); n = n ^ (n >>> 15); return (n >>> 0) / 4294967295;
+}
+function toHex(rgb) { return '#' + rgb.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join(''); }
+
+/* ---------- connected components (4-neighbour) ---------- */
+function components(labels, w, h, T, minArea, erase, idOut) {
+  const n = w * h, seen = new Uint8Array(n), st = new Int32Array(n), buf = new Int32Array(n);
+  const comps = [];
+  for (let s = 0; s < n; s++) {
+    if (seen[s] || labels[s] === 255) continue;
+    const l = labels[s];
+    let sp = 0, cnt = 0, minx = w, miny = h, maxx = 0, maxy = 0, sumT = 0;
+    st[sp++] = s; seen[s] = 1;
+    while (sp) {
+      const i = st[--sp]; buf[cnt++] = i;
+      const x = i % w, y = (i / w) | 0;
+      if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y;
+      if (T) sumT += T[i];
+      if (x > 0 && !seen[i - 1] && labels[i - 1] === l) { seen[i - 1] = 1; st[sp++] = i - 1; }
+      if (x < w - 1 && !seen[i + 1] && labels[i + 1] === l) { seen[i + 1] = 1; st[sp++] = i + 1; }
+      if (y > 0 && !seen[i - w] && labels[i - w] === l) { seen[i - w] = 1; st[sp++] = i - w; }
+      if (y < h - 1 && !seen[i + w] && labels[i + w] === l) { seen[i + w] = 1; st[sp++] = i + w; }
+    }
+    if (cnt < minArea) { if (erase) for (let k = 0; k < cnt; k++) labels[buf[k]] = 255; continue; }
+    if (idOut) for (let k = 0; k < cnt; k++) idOut[buf[k]] = comps.length;
+    comps.push({ l, area: cnt, minx, miny, maxx, maxy, sumT });
+  }
+  return comps;
+}
+
+/* ---------- gradient / photo detector ---------- */
+function gradientRatio(labels, Lc, Ac, Bc, w, h) {
+  const step = 24, half = 12;
+  const isInt = (i, x, y) => {
+    const l = labels[i]; if (l === 255 || x < 3 || y < 3 || x >= w - 3 || y >= h - 3) return false;
+    for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (labels[i + dy * w + dx] !== l) return false;
+    return true;
+  };
+  const mean = (i) => {
+    let a = 0, b = 0, c = 0;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const q = i + dy * w + dx; a += Lc[q]; b += Ac[q]; c += Bc[q]; }
+    return [a / 9, b / 9, c / 9];
+  };
+  const dE = (i, j) => { const p = mean(i), q = mean(j); return Math.sqrt((p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 + (p[2] - q[2]) ** 2); };
+  let interior = 0, smooth = 0;
+  for (let y = 3; y < h - 3; y += 2) for (let x = 3; x < w - 3; x += 2) {
+    const i = y * w + x;
+    if (!isInt(i, x, y)) continue;
+    interior++;
+    const l = labels[i]; let hit = false;
+    if (x + step < w - 3) { const j = i + step; if (labels[j] === l && labels[i + half] === l && isInt(j, x + step, y)) { const d = dE(i, j); if (d > 3.5 && d < 30) hit = true; } }
+    if (!hit && y + step < h - 3) { const j = i + step * w; if (labels[j] === l && labels[i + half * w] === l && isInt(j, x, y + step)) { const d = dE(i, j); if (d > 3.5 && d < 30) hit = true; } }
+    if (hit) smooth++;
+  }
+  return interior > 200 ? smooth / interior : 0;
+}
+
+/* ---------- background detection (shared by analysis and the cut-out picker) ---------- */
+function labArrays(data, w, h) {
+  const n = w * h, Lc = new Float32Array(n), Ac = new Float32Array(n), Bc = new Float32Array(n);
+  for (let i = 0; i < n; i++) { const j = i * 4; rgb2lab(data[j], data[j + 1], data[j + 2], _o); Lc[i] = _o[0]; Ac[i] = _o[1]; Bc[i] = _o[2]; }
+  return { Lc, Ac, Bc };
+}
+function findBackground(data, w, h, Lc, Ac, Bc, tol, ignore) {
+  const n = w * h, bg = new Uint8Array(n);
+  let semi = 0; for (let i = 0; i < n; i++) if (data[i * 4 + 3] < 250) semi++;
+  const hasAlpha = semi / n > 0.01;
+  let bgLab = null;
+  if (ignore !== false) {
+    if (hasAlpha) {
+      for (let i = 0; i < n; i++) if (data[i * 4 + 3] < 128) bg[i] = 1;
+    } else {
+      const cnt = new Map(), perim = [];
+      const keyOf = i => { const j = i * 4; return ((data[j] >> 4) << 8) | ((data[j + 1] >> 4) << 4) | (data[j + 2] >> 4); };
+      const pushP = (x, y) => { const i = y * w + x; perim.push(i); const k = keyOf(i); cnt.set(k, (cnt.get(k) || 0) + 1); };
+      for (let x = 0; x < w; x++) { pushP(x, 0); pushP(x, h - 1); }
+      for (let y = 1; y < h - 1; y++) { pushP(0, y); pushP(w - 1, y); }
+      let bk = -1, bc = 0; for (const [k, c] of cnt) if (c > bc) { bc = c; bk = k; }
+      if (bc / perim.length >= 0.5) {
+        let sl = 0, sa = 0, sb = 0, m = 0;
+        for (const i of perim) if (keyOf(i) === bk) { sl += Lc[i]; sa += Ac[i]; sb += Bc[i]; m++; }
+        bgLab = { L: sl / m, a: sa / m, b: sb / m };
+        const dBg = i => Math.sqrt((Lc[i] - bgLab.L) ** 2 + (Ac[i] - bgLab.a) ** 2 + (Bc[i] - bgLab.b) ** 2);
+        const st = new Int32Array(n); let sp = 0;
+        const tryPush = i => { if (!bg[i] && dBg(i) < tol) { bg[i] = 1; st[sp++] = i; } };
+        for (let x = 0; x < w; x++) { tryPush(x); tryPush((h - 1) * w + x); }
+        for (let y = 0; y < h; y++) { tryPush(y * w); tryPush(y * w + w - 1); }
+        while (sp) {
+          const i = st[--sp], x = i % w, y = (i / w) | 0;
+          if (x > 0) tryPush(i - 1); if (x < w - 1) tryPush(i + 1); if (y > 0) tryPush(i - w); if (y < h - 1) tryPush(i + w);
+        }
+      }
+    }
+  }
+  return { bg, bgLab, hasAlpha };
+}
+/* one background mask per tolerance, for the picker thumbnails */
+function cutouts(data, w, h, tols) {
+  const { Lc, Ac, Bc } = labArrays(data, w, h);
+  let hasAlpha = false;
+  const masks = tols.map(t => { const f = findBackground(data, w, h, Lc, Ac, Bc, t, true); hasAlpha = f.hasAlpha; return f.bg; });
+  return { hasAlpha, masks };
+}
+
+/* ---------- main image analysis ---------- */
+function analyseImageData(data, w, h, opts) {
+  opts = opts || {};
+  const n = w * h;
+  const { Lc, Ac, Bc } = labArrays(data, w, h);
+  const found = findBackground(data, w, h, Lc, Ac, Bc, opts.bgTol || 14, opts.ignoreBg !== false);
+  const bg = found.bg, bgLab = found.bgLab, hasAlpha = found.hasAlpha;
+
+  /* histogram of remaining pixels (4 bits per channel) */
+  const cnt = new Float64Array(4096), sL = new Float64Array(4096), sA = new Float64Array(4096), sB = new Float64Array(4096);
+  let total = 0;
+  for (let i = 0; i < n; i++) {
+    if (bg[i]) continue; const j = i * 4;
+    const k = ((data[j] >> 4) << 8) | ((data[j + 1] >> 4) << 4) | (data[j + 2] >> 4);
+    cnt[k]++; sL[k] += Lc[i]; sA[k] += Ac[i]; sB[k] += Bc[i]; total++;
+  }
+  if (total < 50) throw new Error('empty');
+  const bins = [];
+  for (let k = 0; k < 4096; k++) if (cnt[k] > 0) bins.push({ n: cnt[k], L: sL[k] / cnt[k], a: sA[k] / cnt[k], b: sB[k] / cnt[k] });
+  bins.sort((x, y) => y.n - x.n);
+
+  /* pick centres: heavy and far apart */
+  let centers = [{ L: bins[0].L, a: bins[0].a, b: bins[0].b }];
+  const minCnt = total * 0.004;
+  while (centers.length < 12) {
+    let best = null, bs = 0;
+    for (const b of bins) {
+      if (b.n < minCnt) break;
+      let dm = 1e9; for (const c of centers) { const dd = labDist(b, c); if (dd < dm) dm = dd; }
+      if (dm < 20) continue;
+      const sc = b.n * dm; if (sc > bs) { bs = sc; best = b; }
+    }
+    if (!best) break;
+    centers.push({ L: best.L, a: best.a, b: best.b });
+  }
+  /* weighted k-means on bins */
+  for (let it = 0; it < 5; it++) {
+    const acc = centers.map(() => ({ n: 0, L: 0, a: 0, b: 0 }));
+    for (const b of bins) {
+      let bi = 0, bd = 1e9;
+      for (let c = 0; c < centers.length; c++) { const dd = labDist(b, centers[c]); if (dd < bd) { bd = dd; bi = c; } }
+      const A = acc[bi]; A.n += b.n; A.L += b.L * b.n; A.a += b.a * b.n; A.b += b.b * b.n;
+    }
+    centers = centers.map((c, i) => acc[i].n ? { L: acc[i].L / acc[i].n, a: acc[i].a / acc[i].n, b: acc[i].b / acc[i].n } : c);
+  }
+  /* merge near-identical centres */
+  for (let again = true; again;) {
+    again = false;
+    outer: for (let i = 0; i < centers.length; i++) for (let j = i + 1; j < centers.length; j++) {
+      if (labDist(centers[i], centers[j]) < 14) {
+        centers[i] = { L: (centers[i].L + centers[j].L) / 2, a: (centers[i].a + centers[j].a) / 2, b: (centers[i].b + centers[j].b) / 2 };
+        centers.splice(j, 1); again = true; break outer;
+      }
+    }
+  }
+
+  /* assign pixels */
+  const K = centers.length;
+  const labels = new Uint8Array(n).fill(255);
+  const nearest = (i, alive) => {
+    let bi = -1, bd = 1e18;
+    for (let c = 0; c < K; c++) {
+      if (alive && !alive[c]) continue;
+      const q = centers[c], dd = (Lc[i] - q.L) ** 2 + (Ac[i] - q.a) ** 2 + (Bc[i] - q.b) ** 2;
+      if (dd < bd) { bd = dd; bi = c; }
+    }
+    return bi;
+  };
+  for (let i = 0; i < n; i++) if (!bg[i]) labels[i] = nearest(i, null);
+
+  /* prune: tiny clusters and "in-between" anti-alias clusters */
+  const alive = new Array(K).fill(true);
+  const isBetween = (P, refs) => {
+    for (const A of refs) for (const B of refs) {
+      if (A === B) continue;
+      const abx = B.L - A.L, aby = B.a - A.a, abz = B.b - A.b, len2 = abx * abx + aby * aby + abz * abz;
+      if (len2 < 400) continue;
+      const t = ((P.L - A.L) * abx + (P.a - A.a) * aby + (P.b - A.b) * abz) / len2;
+      if (t < 0.1 || t > 0.9) continue;
+      const dx = P.L - (A.L + t * abx), dy = P.a - (A.a + t * aby), dz = P.b - (A.b + t * abz);
+      if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 16) return true;
+    }
+    return false;
+  };
+  for (let guard = 0; guard < 24; guard++) {
+    const c = new Float64Array(K), e = new Float64Array(K);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const i = y * w + x, l = labels[i]; if (l === 255) continue;
+      c[l]++;
+      if ((x > 0 && labels[i - 1] !== l) || (x < w - 1 && labels[i + 1] !== l) || (y > 0 && labels[i - w] !== l) || (y < h - 1 && labels[i + w] !== l)) e[l]++;
+    }
+    if (alive.filter(Boolean).length <= 1) break;
+    let worst = -1, wc = 1e18;
+    for (let k = 0; k < K; k++) {
+      if (!alive[k]) continue;
+      const small = c[k] < total * 0.004;
+      let remove = small;
+      if (!remove && c[k] > 0 && e[k] / c[k] > 0.5 && c[k] < total * 0.10) {
+        const refs = []; for (let q = 0; q < K; q++) if (q !== k && alive[q]) refs.push(centers[q]);
+        if (bgLab) refs.push(bgLab);
+        remove = isBetween(centers[k], refs);
+      }
+      if (remove && c[k] < wc) { wc = c[k]; worst = k; }
+    }
+    if (worst < 0) break;
+    alive[worst] = false;
+    for (let i = 0; i < n; i++) if (labels[i] === worst) labels[i] = nearest(i, alive);
+  }
+  const remap = new Array(K).fill(255); const pal = [];
+  for (let k = 0; k < K; k++) if (alive[k]) { remap[k] = pal.length; pal.push(centers[k]); }
+  for (let i = 0; i < n; i++) if (labels[i] !== 255) labels[i] = remap[labels[i]];
+
+  /* grow background into anti-aliased fringe */
+  if (bgLab) {
+    const st = new Int32Array(n); let sp = 0;
+    const isBgNear = i => { const x = i % w, y = (i / w) | 0; return (x > 0 && labels[i - 1] !== 255) || (x < w - 1 && labels[i + 1] !== 255) || (y > 0 && labels[i - w] !== 255) || (y < h - 1 && labels[i + w] !== 255); };
+    for (let i = 0; i < n; i++) if (labels[i] === 255 && isBgNear(i)) st[sp++] = i;
+    const stack = Array.from(st.subarray(0, sp));
+    const tryGrow = q => {
+      if (labels[q] === 255) return;
+      const c = pal[labels[q]];
+      const dB = Math.sqrt((Lc[q] - bgLab.L) ** 2 + (Ac[q] - bgLab.a) ** 2 + (Bc[q] - bgLab.b) ** 2);
+      const dC = Math.sqrt((Lc[q] - c.L) ** 2 + (Ac[q] - c.a) ** 2 + (Bc[q] - c.b) ** 2);
+      if (dB <= dC + 2) { labels[q] = 255; stack.push(q); }
+    };
+    while (stack.length) {
+      const i = stack.pop(), x = i % w, y = (i / w) | 0;
+      if (x > 0) tryGrow(i - 1); if (x < w - 1) tryGrow(i + 1); if (y > 0) tryGrow(i - w); if (y < h - 1) tryGrow(i + w);
+    }
+  }
+
+  /* remove specks, then measure gradients */
+  components(labels, w, h, null, 5, true);
+  const gradRatio = gradientRatio(labels, Lc, Ac, Bc, w, h);
+
+  /* crop to artwork (ignore rows/cols with a single stray pixel) */
+  const colC = new Int32Array(w), rowC = new Int32Array(h);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (labels[y * w + x] !== 255) { colC[x]++; rowC[y]++; }
+  let x0 = 0, x1 = w - 1, y0 = 0, y1 = h - 1;
+  while (x0 < w && colC[x0] < 2) x0++; while (x1 > x0 && colC[x1] < 2) x1--;
+  while (y0 < h && rowC[y0] < 2) y0++; while (y1 > y0 && rowC[y1] < 2) y1--;
+  if (x1 <= x0 || y1 <= y0) throw new Error('empty');
+  const cw = x1 - x0 + 1, ch = y1 - y0 + 1;
+  const cl = new Uint8Array(cw * ch);
+  for (let y = 0; y < ch; y++) for (let x = 0; x < cw; x++) cl[y * cw + x] = labels[(y + y0) * w + (x + x0)];
+
+  /* palette colours from interior pixels */
+  const sums = pal.map(() => [0, 0, 0, 0]), sumsAll = pal.map(() => [0, 0, 0, 0]);
+  for (let y = 0; y < ch; y++) for (let x = 0; x < cw; x++) {
+    const i = y * cw + x, l = cl[i]; if (l === 255) continue;
+    const j = ((y + y0) * w + (x + x0)) * 4;
+    sumsAll[l][0] += data[j]; sumsAll[l][1] += data[j + 1]; sumsAll[l][2] += data[j + 2]; sumsAll[l][3]++;
+    if (x > 0 && y > 0 && x < cw - 1 && y < ch - 1 && cl[i - 1] === l && cl[i + 1] === l && cl[i - cw] === l && cl[i + cw] === l) {
+      sums[l][0] += data[j]; sums[l][1] += data[j + 1]; sums[l][2] += data[j + 2]; sums[l][3]++;
+    }
+  }
+  const palette = pal.map((c, k) => {
+    const s = sums[k][3] > 10 ? sums[k] : sumsAll[k];
+    const m = Math.max(1, s[3]);
+    const rgb = [s[0] / m, s[1] / m, s[2] / m].map(Math.round);
+    return { rgb, hex: toHex(rgb), lab: { L: c.L, a: c.a, b: c.b } };
+  });
+
+  const A = { w: cw, h: ch, crop: { x: x0, y: y0, w: cw, h: ch }, labels: cl, palette, gradRatio, hasBg: !!(bgLab || hasAlpha), hasAlpha };
+  A.bgLab = bgLab; A.openAreas = 0;
+  finishLabels(A);
+  if (opts.openAreas !== false && bgLab) {
+    const n0 = reclaimOpenAreas(A, bgLab);
+    if (n0) { A.openAreas = n0; compactPalette(A); finishLabels(A); }
+  }
+  return A;
+}
+
+/* ---------- distance transform, local thickness, components ---------- */
+function thickness(labels, w, h) {
+  const n = w * h;
+  const dt = new Float32Array(n), INF = 1e9, R2 = 1.4142;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, l = labels[i];
+    if (l === 255) { dt[i] = 0; continue; }
+    if (x === 0 || y === 0 || x === w - 1 || y === h - 1 || labels[i - 1] !== l || labels[i + 1] !== l || labels[i - w] !== l || labels[i + w] !== l) dt[i] = 0.5; else dt[i] = INF;
+  }
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, l = labels[i]; if (l === 255) continue;
+    let v = dt[i], c;
+    if (x > 0 && labels[i - 1] === l) { c = dt[i - 1] + 1; if (c < v) v = c; }
+    if (y > 0) {
+      if (labels[i - w] === l) { c = dt[i - w] + 1; if (c < v) v = c; }
+      if (x > 0 && labels[i - w - 1] === l) { c = dt[i - w - 1] + R2; if (c < v) v = c; }
+      if (x < w - 1 && labels[i - w + 1] === l) { c = dt[i - w + 1] + R2; if (c < v) v = c; }
+    }
+    dt[i] = v;
+  }
+  for (let y = h - 1; y >= 0; y--) for (let x = w - 1; x >= 0; x--) {
+    const i = y * w + x, l = labels[i]; if (l === 255) continue;
+    let v = dt[i], c;
+    if (x < w - 1 && labels[i + 1] === l) { c = dt[i + 1] + 1; if (c < v) v = c; }
+    if (y < h - 1) {
+      if (labels[i + w] === l) { c = dt[i + w] + 1; if (c < v) v = c; }
+      if (x > 0 && labels[i + w - 1] === l) { c = dt[i + w - 1] + R2; if (c < v) v = c; }
+      if (x < w - 1 && labels[i + w + 1] === l) { c = dt[i + w + 1] + R2; if (c < v) v = c; }
+    }
+    dt[i] = v;
+  }
+  /* local thickness: push the ridge value outward to the edge */
+  const T = new Float32Array(n), key = new Int32Array(n);
+  let maxK = 0, m = 0;
+  for (let i = 0; i < n; i++) if (labels[i] !== 255) { T[i] = 2 * dt[i]; key[i] = Math.round(dt[i] * 2); if (key[i] > maxK) maxK = key[i]; m++; }
+  const cnt = new Int32Array(maxK + 2);
+  for (let i = 0; i < n; i++) if (labels[i] !== 255) cnt[key[i] + 1]++;
+  for (let k = 1; k < cnt.length; k++) cnt[k] += cnt[k - 1];
+  const order = new Int32Array(m), pos = cnt.slice();
+  for (let i = 0; i < n; i++) if (labels[i] !== 255) order[pos[key[i]]++] = i;
+  for (let q = m - 1; q >= 0; q--) {
+    const p = order[q], l = labels[p], dp = dt[p], tp = T[p], x = p % w, y = (p / w) | 0;
+    for (let dy = -1; dy <= 1; dy++) {
+      const yy = y + dy; if (yy < 0 || yy >= h) continue;
+      for (let dx = -1; dx <= 1; dx++) {
+        if (!dx && !dy) continue; const xx = x + dx; if (xx < 0 || xx >= w) continue;
+        const nb = yy * w + xx;
+        if (labels[nb] === l && dt[nb] < dp && T[nb] < tp) T[nb] = tp;
+      }
+    }
+  }
+  return T;
+}
+
+function finishLabels(A) {
+  const { w, h, labels } = A, n = w * h;
+  A.T = thickness(labels, w, h);
+  A.compId = new Int32Array(n).fill(-1);
+  A.comps = components(labels, w, h, A.T, 1, false, A.compId);
+  A.counts = A.palette.map(() => 0);
+  for (let i = 0; i < n; i++) if (labels[i] !== 255) A.counts[labels[i]]++;
+  computeGround(A);
+  return A;
+}
+
+/* shapes sitting entirely inside a much larger shape (white lettering on a blue badge) are
+   normally stitched on top of a continuous fill of the larger shape, not cut out of it */
+function computeGround(A) {
+  const { w, h, labels, compId, comps } = A, n = w * h, m = comps.length;
+  const nb = new Array(m), bad = new Uint8Array(m);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, k = compId[i]; if (k < 0) continue;
+    const qs = [x > 0 ? i - 1 : -1, x < w - 1 ? i + 1 : -1, y > 0 ? i - w : -1, y < h - 1 ? i + w : -1];
+    for (const q of qs) {
+      if (q < 0) continue;
+      if (labels[q] === 255) { bad[k] = 1; continue; }
+      const kq = compId[q];
+      if (kq !== k) { if (!nb[k]) nb[k] = new Set(); nb[k].add(kq); }
+    }
+  }
+  /* peel from the inside out: a shape touching only one other shape sits inside it. Once the
+     counters of a letter are peeled away, the letter itself touches only the badge and peels too. */
+  const host = new Int32Array(m).fill(-1), alive = new Uint8Array(m).fill(1);
+  for (let changed = true; changed;) {
+    changed = false;
+    for (let k = 0; k < m; k++) {
+      if (!alive[k] || bad[k] || !nb[k] || nb[k].size !== 1) continue;
+      const e = nb[k].values().next().value;
+      if (!bad[e] && nb[e] && nb[e].size === 1 && comps[e].area < comps[k].area) continue;
+      host[k] = e; alive[k] = 0; nb[e].delete(k); changed = true;
+    }
+  }
+  A.host = host;
+  const topOf = k => { let c = k; while (host[c] >= 0) c = host[c]; return c; };
+  const top = new Int32Array(m), childArea = new Float64Array(m);
+  for (let k = 0; k < m; k++) top[k] = topOf(k);
+  for (let k = 0; k < m; k++) if (host[k] >= 0 && host[k] === top[k]) childArea[top[k]] += comps[k].area;
+  /* keep the grouping only when the base shape is clearly bigger than what sits on it */
+  for (let k = 0; k < m; k++) if (host[k] >= 0 && comps[top[k]].area < 2 * childArea[top[k]]) top[k] = k;
+  const gl = new Uint8Array(labels); let any = false;
+  for (let i = 0; i < n; i++) { const k = compId[i]; if (k >= 0 && top[k] !== k) { gl[i] = comps[top[k]].l; any = true; } }
+  A.gl = gl; A.holes = any;
+  A.Tg = any ? thickness(gl, w, h) : A.T;
+}
+
+/* ---------- enclosed "open" areas (inside frames, letter counters) are fabric, not thread ---------- */
+function reclaimOpenAreas(A, bgLab) {
+  const { w, h, labels, T, palette, comps, compId } = A;
+  const like = palette.map(p => labDist(p.lab, bgLab) < 20);
+  if (!like.some(Boolean)) return 0;
+  const edgeT = new Map();
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, k = compId[i];
+    if (k < 0 || !like[labels[i]]) continue;
+    const l = labels[i];
+    const nb = [x > 0 ? i - 1 : -1, x < w - 1 ? i + 1 : -1, y > 0 ? i - w : -1, y < h - 1 ? i + w : -1];
+    for (const q of nb) if (q >= 0 && labels[q] !== 255 && labels[q] !== l) { let a = edgeT.get(k); if (!a) edgeT.set(k, a = []); a.push(T[q]); }
+  }
+  const open = new Set();
+  for (const [k, arr] of edgeT) {
+    arr.sort((p, q) => p - q);
+    const med = arr[arr.length >> 1], c = comps[k];
+    if (med / Math.sqrt(c.area) < 0.3) open.add(k);
+  }
+  /* Pockets of background colour enclosed by a letter-like stroke are counters, so they stay fabric.
+     A letter holds one or two of them and is thin compared with its own size. A badge or banner holds many
+     shapes (the lettering), so its pockets are real thread. */
+  if (A.host) {
+    const pockets = new Map();
+    for (let k = 0; k < comps.length; k++) if (like[comps[k].l] && A.host[k] >= 0) pockets.set(A.host[k], (pockets.get(A.host[k]) || 0) + 1);
+    for (let k = 0; k < comps.length; k++) {
+      if (open.has(k) || !like[comps[k].l] || A.host[k] < 0) continue;
+      const e = A.host[k], c = comps[e], meanT = c.sumT / c.area, minDim = Math.min(c.maxx - c.minx + 1, c.maxy - c.miny + 1);
+      if (pockets.get(e) <= 2 && meanT / minDim < 0.4) open.add(k);
+    }
+  }
+  if (!open.size) return 0;
+  for (let i = 0; i < labels.length; i++) if (compId[i] >= 0 && open.has(compId[i])) labels[i] = 255;
+  return open.size;
+}
+function compactPalette(A) {
+  A.counts = A.palette.map(() => 0);
+  for (let i = 0; i < A.labels.length; i++) if (A.labels[i] !== 255) A.counts[A.labels[i]]++;
+  const map = [], pal = []; 
+  for (let k = 0; k < A.palette.length; k++) { if (A.counts[k] > 0) { map.push(pal.length); pal.push(A.palette[k]); } else map.push(255); }
+  for (let i = 0; i < A.labels.length; i++) { const l = A.labels[i]; if (l !== 255) A.labels[i] = map[l]; }
+  A.palette = pal;
+}
+
+/* ---------- read a Tajima DST file ---------- */
+function parseDST(buf) {
+  const u = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  if (u.length < 515) throw new Error('short');
+  let hdr = ''; for (let i = 0; i < 512; i++) hdr += String.fromCharCode(u[i]);
+  const num = tag => { const m = hdr.match(new RegExp(tag + ':\\s*([0-9]+)')); return m ? +m[1] : null; };
+  let x = 0, y = 0, stitches = 0, jumps = 0, colorChanges = 0;
+  let minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9, longest = 0;
+  for (let i = 512; i + 2 < u.length; i += 3) {
+    const b0 = u[i], b1 = u[i + 1], b2 = u[i + 2];
+    if (b2 === 0xF3) break;
+    let dx = 0, dy = 0;
+    if (b0 & 1) dx += 1; if (b0 & 2) dx -= 1; if (b0 & 4) dx += 9; if (b0 & 8) dx -= 9;
+    if (b0 & 0x80) dy += 1; if (b0 & 0x40) dy -= 1; if (b0 & 0x20) dy += 9; if (b0 & 0x10) dy -= 9;
+    if (b1 & 1) dx += 3; if (b1 & 2) dx -= 3; if (b1 & 4) dx += 27; if (b1 & 8) dx -= 27;
+    if (b1 & 0x80) dy += 3; if (b1 & 0x40) dy -= 3; if (b1 & 0x20) dy += 27; if (b1 & 0x10) dy -= 27;
+    if (b2 & 4) dx += 81; if (b2 & 8) dx -= 81; if (b2 & 0x20) dy += 81; if (b2 & 0x10) dy -= 81;
+    if ((b2 & 0xC3) === 0xC3) { colorChanges++; continue; }
+    x += dx; y += dy;
+    if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y;
+    if ((b2 & 0x83) === 0x83) { jumps++; continue; }
+    stitches++;
+    const len = Math.sqrt(dx * dx + dy * dy) / 10; if (len > longest) longest = len;
+  }
+  if (!stitches) throw new Error('empty');
+  return { label: (hdr.match(/LA:([^\r]*)/) || [, ''])[1].trim(), headerStitches: num('ST'), stitches, jumps, colorChanges, colors: colorChanges + 1,
+    widthMm: (maxx - minx) / 10, heightMm: (maxy - miny) / 10, longestMm: longest };
+}
+
+/* ---------- measure how a DST was digitized (satin spacing, fill row spacing, stitch length) ---------- */
+function measureDST(buf) {
+  const u = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  if (u.length < 515) throw new Error('short');
+  let x = 0, y = 0, k = 0; const st = [];
+  for (let i = 512; i + 2 < u.length; i += 3) {
+    const b0 = u[i], b1 = u[i + 1], b2 = u[i + 2];
+    if (b2 === 0xF3) break;
+    let dx = 0, dy = 0;
+    if (b0 & 1) dx += 1; if (b0 & 2) dx -= 1; if (b0 & 4) dx += 9; if (b0 & 8) dx -= 9;
+    if (b0 & 0x80) dy += 1; if (b0 & 0x40) dy -= 1; if (b0 & 0x20) dy += 9; if (b0 & 0x10) dy -= 9;
+    if (b1 & 1) dx += 3; if (b1 & 2) dx -= 3; if (b1 & 4) dx += 27; if (b1 & 8) dx -= 27;
+    if (b1 & 0x80) dy += 3; if (b1 & 0x40) dy -= 3; if (b1 & 0x20) dy += 27; if (b1 & 0x10) dy -= 27;
+    if (b2 & 4) dx += 81; if (b2 & 8) dx -= 81; if (b2 & 0x20) dy += 81; if (b2 & 0x10) dy -= 81;
+    if ((b2 & 0xC3) === 0xC3) { k++; continue; }
+    const x0 = x, y0 = y; x += dx; y += dy;
+    if ((b2 & 0x83) === 0x83) { st.push(null); continue; }       /* jump breaks a run of stitches */
+    st.push({ k, x0: x0 / 10, y0: y0 / 10, x1: x / 10, y1: y / 10, len: Math.sqrt(dx * dx + dy * dy) / 10 });
+  }
+  const median = a => { const b = a.slice().sort((p, q) => p - q); return b[b.length >> 1]; };
+  /* satin: the step between consecutive short stitches inside a column is the row spacing */
+  const steps = [], lens = [];
+  for (let i = 1; i < st.length; i++) {
+    const a = st[i - 1], b = st[i]; if (!a || !b || a.k !== b.k) continue;
+    if (a.len > 0.6 && a.len < 3.2 && b.len > 0.6 && b.len < 3.2) {
+      const d = Math.hypot((a.x0 + a.x1) / 2 - (b.x0 + b.x1) / 2, (a.y0 + a.y1) / 2 - (b.y0 + b.y1) / 2);
+      if (d < 1.2) { steps.push(d); lens.push(b.len); }
+    }
+  }
+  const out = { satinSpacing: null, satinWidth: null, satinPct: null, tatamiSpacing: null, tatamiLength: null, tatamiPct: null };
+  if (steps.length >= 200) {
+    out.satinSpacing = median(steps); out.satinWidth = lens.reduce((p, q) => p + q, 0) / lens.length;
+    out.satinPct = out.satinSpacing / satinPreset(out.satinWidth);
+  }
+  /* tatami: long stitches share one dominant angle; count rows crossed by a probe line at right angles */
+  const longs = st.filter(s => s && s.len >= 2.5);
+  if (longs.length >= 300) {
+    const bins = new Map();
+    for (const s of longs) { const a = ((Math.atan2(s.y1 - s.y0, s.x1 - s.x0) * 180 / Math.PI) % 180 + 180) % 180; const b = Math.round(a / 10) * 10 % 180; bins.set(b, (bins.get(b) || 0) + 1); }
+    let best = 0, bc = 0; for (const [b, c] of bins) if (c > bc) { bc = c; best = b; }
+    const near = longs.filter(s => { const a = ((Math.atan2(s.y1 - s.y0, s.x1 - s.x0) * 180 / Math.PI) % 180 + 180) % 180; const d = Math.abs(a - best); return Math.min(d, 180 - d) <= 15; });
+    /* use the colour block that holds most of them (the big fill) */
+    const byK = new Map(); for (const s of near) byK.set(s.k, (byK.get(s.k) || 0) + 1);
+    let kk = -1, kc = 0; for (const [q, c] of byK) if (c > kc) { kc = c; kk = q; }
+    const fill = near.filter(s => s.k === kk);
+    if (fill.length >= 300) {
+      const th = best * Math.PI / 180, nx = -Math.sin(th), ny = Math.cos(th);
+      let cx = 0, cy = 0; for (const s of fill) { cx += (s.x0 + s.x1) / 2; cy += (s.y0 + s.y1) / 2; } cx /= fill.length; cy /= fill.length;
+      const cross = [];
+      for (const s of fill) {
+        const dx = s.x1 - s.x0, dy = s.y1 - s.y0, den = dx * ny - dy * nx; if (Math.abs(den) < 1e-9) continue;
+        const sp = ((cx - s.x0) * ny - (cy - s.y0) * nx) / den, uu = ((cx - s.x0) * dy - (cy - s.y0) * dx) / den;
+        if (sp >= 0 && sp <= 1 && Math.abs(uu) < 6) cross.push(uu);
+      }
+      cross.sort((p, q) => p - q);
+      const gaps = []; for (let i = 1; i < cross.length; i++) { const g = cross[i] - cross[i - 1]; if (g > 0.02 && g < 1.0) gaps.push(g); }
+      if (gaps.length >= 20) { out.tatamiSpacing = median(gaps); out.tatamiPct = out.tatamiSpacing / TATAMI_DEFAULT; out.tatamiLength = fill.reduce((p, q) => p + q.len, 0) / fill.length; }
+    }
+  }
+  return out;
+}
+
+/* a colour that sits entirely inside another of the same hue family (gold letters with a brown inlay) is probably
+   shading, not a separate thread colour */
+function shadeCandidates(A) {
+  const out = [], { w, h, labels, compId, comps } = A;
+  const touchesBg = new Uint8Array(comps.length), nbrLabels = comps.map(() => new Set());
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, k = compId[i]; if (k < 0) continue; const l = labels[i];
+    for (const q of [x > 0 ? i - 1 : -1, x < w - 1 ? i + 1 : -1, y > 0 ? i - w : -1, y < h - 1 ? i + w : -1]) {
+      if (q < 0) continue;
+      if (labels[q] === 255) touchesBg[k] = 1; else if (labels[q] !== l) nbrLabels[k].add(labels[q]);
+    }
+  }
+  const px = new Map();   /* pixels of colour k that are surrounded by one single other colour g (and never touch the background) */
+  comps.forEach((c, k) => { if (touchesBg[k] || nbrLabels[k].size !== 1) return; const g = nbrLabels[k].values().next().value; const key = c.l * 256 + g; px.set(key, (px.get(key) || 0) + c.area); });
+  for (const [key, n] of px) {
+    const k = key >> 8, g = key & 255;
+    if (n < 0.9 * A.counts[k]) continue;
+    const a = A.palette[k].lab, b = A.palette[g].lab;
+    if (Math.hypot(a.a, a.b) < 15 || Math.hypot(b.a, b.b) < 15) continue;      /* black, white and grey have no hue */
+    let dh = Math.abs(Math.atan2(a.b, a.a) - Math.atan2(b.b, b.a)) * 180 / Math.PI; if (dh > 180) dh = 360 - dh;
+    if (dh < 40 && labDist(a, b) < 75) out.push({ k, g });
+  }
+  return out;
+}
+
+/* ---------- merge two palette colours ---------- */
+function mergeColors(A, a, b) {
+  const ca = A.counts[a], cb = A.counts[b], t = ca + cb || 1;
+  const rgb = [0, 1, 2].map(k => Math.round((A.palette[a].rgb[k] * ca + A.palette[b].rgb[k] * cb) / t));
+  const la = A.palette[a].lab, lb = A.palette[b].lab;
+  A.palette[a] = { rgb, hex: toHex(rgb), lab: { L: (la.L * ca + lb.L * cb) / t, a: (la.a * ca + lb.a * cb) / t, b: (la.b * ca + lb.b * cb) / t } };
+  const map = []; let nk = 0;
+  for (let k = 0; k < A.palette.length; k++) { if (k === b) { map.push(-1); continue; } map.push(nk++); }
+  map[b] = map[a];
+  for (let i = 0; i < A.labels.length; i++) { const l = A.labels[i]; if (l !== 255) A.labels[i] = map[l]; }
+  A.palette = A.palette.filter((_, k) => k !== b);
+  finishLabels(A);
+  return map;
+}
+
+/* ---------- stitch estimate for a given physical size ---------- */
+function compute(A, cfg) {
+  const { w, h, labels, T } = A;
+  const gl = A.gl || labels, Tg = A.Tg || T;
+  const overlay = cfg.overlay !== false && !!A.holes;
+  const mmpp = cfg.widthMm / w, pxA = mmpp * mmpp;
+  const minW = cfg.minW, sp = cfg.spacing, satMax = cfg.satMax || 4;
+  const satDen = cfg.satinDensity == null ? 0.42 : cfg.satinDensity;     /* fraction of Wilcom's width-based preset */
+  const fillLen = cfg.fillLen || 3.9;
+  const fu = cfg.fillUnder == null ? 0.16 : cfg.fillUnder, su = cfg.satinUnder == null ? 0.5 : cfg.satinUnder;
+  const bpm = cfg.borderPerMm == null ? 8.7 : cfg.borderPerMm;
+  const perColor = cfg.perColor == null ? 12 : cfg.perColor;
+  const cover = 0.87;                                                     /* share of a fill area that carries full-length rows */
+  const fillDens = (cover / (sp * fillLen)) * (1 + fu);
+  const satSp = t => satinPreset(Math.max(t, 0.5)) * satDen;
+  const borderSt = mmpp * 0.85 * bpm;
+  const per = A.palette.map(() => ({ area: 0, fill: 0, satin: 0, thin: 0, stFill: 0, stSatin: 0, stThin: 0, stOut: 0 }));
+  const hist = new Float64Array(400); let histW = 0;
+  let thinLen = 0, thinArea = 0, borderArea = 0, area = 0, under = 0;
+  const edgeOf = (arr, i, x, y) => x === 0 || y === 0 || x === w - 1 || y === h - 1 || arr[i - 1] !== arr[i] || arr[i + 1] !== arr[i] || arr[i - w] !== arr[i] || arr[i + w] !== arr[i];
+  const add = (pc, t, edge, isUnder) => {
+    let st = 0;
+    if (t >= satMax) { pc.fill += pxA; st = pxA * fillDens; pc.stFill += st; if (edge && t >= 10) { pc.stOut += borderSt; st += borderSt; } }
+    else if (t >= minW) { pc.satin += pxA; st = pxA / (satSp(t) * t) * (1 + su); pc.stSatin += st; if (t < minW * 1.5) borderArea += pxA; }
+    else {
+      /* thinner than the safe minimum: a digitizer will still satin it (widened), so count it as satin */
+      st = pxA / (satSp(t) * Math.max(t, 0.5)) * (1 + su); pc.thin += pxA; pc.stThin += st;
+      thinLen += pxA / Math.max(t, 0.3); thinArea += pxA;
+    }
+    if (isUnder) under += st;
+  };
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, l = labels[i];
+    if (l === 255) continue;
+    const g = gl[i], isHole = overlay && g !== l;
+    if (!cfg.skip[l]) {
+      const tpx = overlay && !isHole ? Tg[i] : T[i];
+      const edge = edgeOf(overlay && !isHole ? gl : labels, i, x, y);
+      per[l].area += pxA; area += pxA;
+      add(per[l], tpx * mmpp, edge, false);
+      const tm = Math.max(T[i], 1), b = Math.min(399, Math.round(tm * 2)), wg = 1 / tm; hist[b] += wg; histW += wg;
+      if (isHole && !cfg.skip[g]) add(per[g], Tg[i] * mmpp, false, true);
+    }
+  }
+  const tot = { fill: 0, satin: 0, thin: 0, out: 0, stitches: 0, area: 0, areaFill: 0, areaSatin: 0, areaThin: 0 };
+  per.forEach((p, k) => { if (!cfg.skip[k] && p.area > 0) p.stOut += perColor; });
+  for (const p of per) {
+    p.st = p.stFill + p.stSatin + p.stThin + p.stOut;
+    tot.fill += p.stFill; tot.satin += p.stSatin; tot.thin += p.stThin; tot.out += p.stOut; tot.stitches += p.st;
+    tot.areaFill += p.fill; tot.areaSatin += p.satin; tot.areaThin += p.thin;
+  }
+  let acc = 0, minFeaturePx = 1; const target = histW * 0.02;
+  for (let b = 0; b < 400; b++) { acc += hist[b]; if (histW > 0 && acc >= target) { minFeaturePx = Math.max(1, b / 2); break; } }
+
+  let specks = 0, letters = 0, minLetterHpx = Infinity;
+  for (const c of A.comps) {
+    if (cfg.skip[c.l]) continue;
+    const bwpx = c.maxx - c.minx + 1, bhpx = c.maxy - c.miny + 1, bw = bwpx * mmpp, bh = bhpx * mmpp;
+    const dim = Math.max(bw, bh), meanT = (c.sumT / c.area) * mmpp;
+    if (dim < 1.0) { specks++; continue; }
+    if (dim < 12 && bh < 4.2 && bh >= 1.8 && Math.min(bw, bh) >= 0.8 && meanT < 1.8) { letters++; if (bhpx < minLetterHpx) minLetterHpx = bhpx; }
+  }
+  const used = A.palette.map((_, k) => !cfg.skip[k] && per[k].area > 0);
+  return {
+    mmpp, per, tot, area, thinLen, thinArea, borderArea, minFeaturePx, minFeatureMm: minFeaturePx * mmpp, under, overlay,
+    specks, letters, minLetterHpx: isFinite(minLetterHpx) ? minLetterHpx : 0, minLetterMm: isFinite(minLetterHpx) ? minLetterHpx * mmpp : 0,
+    colors: used.filter(Boolean).length, used
+  };
+}
+
+return { analyseImageData, shadeCandidates, parseDST, measureDST, satinPreset, TATAMI_DEFAULT, cutouts, finishLabels, mergeColors, compute, labDist, hash, toHex };
+})();
+
+
+(function () {
+'use strict';
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = n => Math.round(n).toLocaleString();
+
+/* Placement and fabric are not part of the estimate for now: one fixed profile.
+   Row spacing 0.18 mm and satin/fill values come from the shop's measured DST files. */
+const PROFILE = { minW: 1.0, warn: 20000, bad: 45000, maxW: 400, maxH: 400, defW: 90 };
+const FAB_COLORS = [['#F1F2F4', 'White'], ['#8C95A6', 'Grey'], ['#22336E', 'Navy'], ['#1A1C22', 'Black'], ['#8F2233', 'Burgundy']];
+
+/* Stitch settings in Wilcom's own terms. Density % is a share of Wilcom's default spacing (100% = default, lower = tighter).
+   Defaults are what was measured in the shop's first two DST files. */
+const DEFAULT_SET = { satin: 42, fill: 38, satinUnder: 65, fillUnder: 16, border: 100 };
+const S = { set: Object.assign({}, DEFAULT_SET), measured: null, widthMm: 90, view: 'stitch', fabricColor: '#F1F2F4', ignoreBg: true, overlay: true, dst: null, A: null, skip: [], R: null, name: '', tips: [] };
+let SRC = null;
+
+/* ---------- calibration ("learning") ---------- */
+const CAL_KEY = 'stitchcheck.cal.v2';
+let CAL = { s: [], p: [] };
+try { const v = JSON.parse(localStorage.getItem(CAL_KEY) || 'null'); if (v && Array.isArray(v.s)) CAL = v; } catch (e) {}
+if (!Array.isArray(CAL.p)) CAL.p = [];
+function saveCal() { try { localStorage.setItem(CAL_KEY, JSON.stringify(CAL)); return true; } catch (e) { return false; } }
+/* Each saved file is one equation: fill*mF + satin*mS + border*mB = real stitches.
+   Solved by ridge regression toward 1.0, so a single file barely moves things and many files steer them. */
+function calMult() {
+  if (!CAL.s.length) return [1, 1, 1];
+  const lam = 0.15, n = 3, M = [[lam, 0, 0], [0, lam, 0], [0, 0, lam]], b = [lam, lam, lam];
+  for (const smp of CAL.s) {
+    const w = 1 / (smp.y * smp.y);
+    for (let i = 0; i < n; i++) { for (let j = 0; j < n; j++) M[i][j] += w * smp.x[i] * smp.x[j]; b[i] += w * smp.x[i] * smp.y; }
+  }
+  for (let c = 0; c < n; c++) {
+    let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+    [M[c], M[p]] = [M[p], M[c]]; [b[c], b[p]] = [b[p], b[c]];
+    for (let r = c + 1; r < n; r++) { const f = M[r][c] / M[c][c]; for (let k = c; k < n; k++) M[r][k] -= f * M[c][k]; b[r] -= f * b[c]; }
+  }
+  const m = [0, 0, 0];
+  for (let i = n - 1; i >= 0; i--) { let s = b[i]; for (let k = i + 1; k < n; k++) s -= M[i][k] * m[k]; m[i] = s / M[i][i]; }
+  return m.map(v => Math.min(2.5, Math.max(0.5, isFinite(v) ? v : 1)));
+}
+function applyCal(R) {
+  const m = calMult();
+  R.raw = { stitches: R.tot.stitches, x: [R.tot.fill, R.tot.satin + R.tot.thin, R.tot.out] };
+  R.mult = m;
+  for (const p of R.per) { p.stFill *= m[0]; p.stSatin *= m[1]; p.stThin *= m[1]; p.stOut *= m[2]; p.st = p.stFill + p.stSatin + p.stThin + p.stOut; }
+  R.tot.fill *= m[0]; R.tot.satin *= m[1]; R.tot.thin *= m[1]; R.tot.out *= m[2];
+  R.tot.stitches = R.tot.fill + R.tot.satin + R.tot.thin + R.tot.out; R.under *= m[0];
+}
+function applyProfile() {
+  const med = a => { const b = a.slice().sort((x, y) => x - y); return b[b.length >> 1]; };
+  const sv = CAL.p.map(p => p.satin).filter(v => v > 0), fv = CAL.p.map(p => p.fill).filter(v => v > 0);
+  if (sv.length) S.set.satin = Math.round(med(sv) * 100);
+  if (fv.length) S.set.fill = Math.round(med(fv) * 100);
+}
+applyProfile();
+function calFactor() { return 1; }   /* multipliers are applied once, inside update() */
+
+/* ---------- units ---------- */
+const toU = mm => mm / 25.4;
+const fromU = v => v * 25.4;
+const fmtLen = mm => (mm / 25.4).toFixed(2) + ' in';
+
+/* ---------- setup controls ---------- */
+FAB_COLORS.forEach(([hex, name]) => {
+  const b = document.createElement('button'); b.type = 'button'; b.style.background = hex; b.title = name; b.setAttribute('aria-label', name + ' fabric');
+  b.setAttribute('aria-pressed', hex === S.fabricColor ? 'true' : 'false'); b.dataset.hex = hex;
+  b.addEventListener('click', () => { S.fabricColor = hex; [...$('#fabSw').children].forEach(x => x.setAttribute('aria-pressed', x.dataset.hex === hex ? 'true' : 'false')); renderPreview(); });
+  $('#fabSw').appendChild(b);
+});
+
+function msg(t) { $('#msg').textContent = t; $('#msg2').textContent = t; }
+
+/* ---------- loading images ---------- */
+function loadFile(file) {
+  if (!file) return;
+  if (!(/^image\//.test(file.type) || /\.(svg|png|jpe?g|webp|gif|bmp)$/i.test(file.name))) { msg('That file is not an image. Try PNG, JPG, WebP or SVG.'); return; }
+  const fr = new FileReader();
+  fr.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const svg = file.type === 'image/svg+xml' || /\.svg$/i.test(file.name);
+      let iw = img.naturalWidth, ih = img.naturalHeight; if (!iw || !ih) { iw = 800; ih = 800; }
+      SRC = { el: img, w: iw, h: ih, svg }; S.name = file.name; run(true);
+    };
+    img.onerror = () => msg('This image could not be read. Try exporting it as PNG.');
+    img.src = fr.result;
+  };
+  fr.onerror = () => msg('This file could not be read.');
+  fr.readAsDataURL(file);
+}
+
+function analyse() {
+  const MAX = 640;
+  const sc = SRC.svg ? MAX / Math.max(SRC.w, SRC.h) : Math.min(1, MAX / Math.max(SRC.w, SRC.h));
+  const w = Math.max(16, Math.round(SRC.w * sc)), h = Math.max(16, Math.round(SRC.h * sc));
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  const cx = cv.getContext('2d', { willReadFrequently: true });
+  cx.drawImage(SRC.el, 0, 0, w, h);
+  const id = cx.getImageData(0, 0, w, h);
+  const A = Core.analyseImageData(id.data, w, h, { ignoreBg: S.ignoreBg, openAreas: S.ignoreBg });
+  const oc = document.createElement('canvas'); oc.width = A.w; oc.height = A.h;
+  oc.getContext('2d').drawImage(cv, A.crop.x, A.crop.y, A.crop.w, A.crop.h, 0, 0, A.w, A.h);
+  A.origCanvas = oc;
+  return A;
+}
+
+function run(fresh) {
+  msg('Analysing the artwork...');
+  $('#fname').textContent = S.name || 'Sample logo';
+  setTimeout(() => {
+    try { S.A = analyse(); } catch (err) {
+      S.A = null;
+      msg(err && err.message === 'empty' ? 'Nothing left after removing the background. Untick "Treat the background as fabric" and try again.' : 'Could not analyse this image. Try a PNG with a transparent background.');
+      return;
+    }
+    msg('');
+    S.skip = S.A.palette.map(() => false);
+    if (fresh) S.widthMm = fitWidth(PROFILE.defW);
+    $('#empty').classList.add('hidden'); $('#results').classList.remove('hidden');
+    update();
+  }, 30);
+}
+
+function fitWidth(w) {
+  const A = S.A, r = A.h / A.w;
+  return Math.max(5, Math.min(w, PROFILE.maxW, PROFILE.maxH / r));
+}
+
+/* ---------- state updates ---------- */
+function setWidth(mm) {
+  mm = Math.max(5, Math.min(600, mm));
+  S.widthMm = mm; update();
+}
+function heightMm() { return S.A ? S.widthMm * S.A.h / S.A.w : S.widthMm * 0.66; }
+
+function cfg() {
+  /* row spacing 0.18 mm at the 0.40 baseline: measured from the shop's real DST files */
+  const q = S.set;
+  return { widthMm: S.widthMm, minW: PROFILE.minW, spacing: Core.TATAMI_DEFAULT * q.fill / 100, satinDensity: q.satin / 100, satinUnder: q.satinUnder / 100, fillUnder: q.fillUnder / 100, borderPerMm: 8.7 * q.border / 100, satMax: 4, overlay: S.overlay, skip: S.skip };
+}
+
+function update() {
+  const A = S.A;
+  if (!A) { syncInputs(); return; }
+  S.R = Core.compute(A, cfg());
+  applyCal(S.R);
+  syncInputs();
+  S.tips = buildTips();
+  renderPreview(); renderResults();
+}
+
+function syncInputs() {
+  const h = heightMm();
+  const wi = $('#wIn'), hi = $('#hIn');
+  if (document.activeElement !== wi) wi.value = toU(S.widthMm).toFixed(2);
+  if (document.activeElement !== hi) hi.value = toU(h).toFixed(2);
+  const rng = $('#wRange'); const max = PROFILE.maxW;
+  rng.min = 10; rng.max = max; rng.value = Math.min(max, Math.max(10, S.widthMm));
+}
+function fitW() { const A = S.A; return Math.min(PROFILE.maxW, PROFILE.maxH * A.w / A.h); }
+
+$('#wIn').addEventListener('input', e => { const v = parseFloat(e.target.value); if (v > 0) setWidth(fromU(v)); });
+$('#hIn').addEventListener('input', e => { const v = parseFloat(e.target.value); if (v > 0 && S.A) setWidth(fromU(v) * S.A.w / S.A.h); });
+$('#wIn').addEventListener('blur', syncInputs); $('#hIn').addEventListener('blur', syncInputs);
+$('#wRange').addEventListener('input', e => setWidth(parseFloat(e.target.value)));
+$('#ignoreBg').addEventListener('change', e => { S.ignoreBg = e.target.checked; if (SRC) run(false); });
+
+$('#pick').addEventListener('click', () => $('#file').click());
+$('#pick2').addEventListener('click', () => $('#file').click());
+$('#file').addEventListener('change', e => { loadFile(e.target.files[0]); e.target.value = ''; });
+window.addEventListener('dragover', e => { e.preventDefault(); $('#empty').classList.add('drag'); });
+window.addEventListener('dragleave', e => { if (!e.relatedTarget) $('#empty').classList.remove('drag'); });
+window.addEventListener('drop', e => { e.preventDefault(); $('#empty').classList.remove('drag'); const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) loadFile(f); });
+window.addEventListener('paste', e => { const items = (e.clipboardData && e.clipboardData.items) || []; for (const it of items) if (it.type.indexOf('image') === 0) { loadFile(it.getAsFile()); break; } });
+
+$('#themeBtn').addEventListener('click', () => {
+  const r = document.documentElement, cur = r.getAttribute('data-theme');
+  const dark = cur ? cur === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.setAttribute('data-theme', dark ? 'light' : 'dark');
+});
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  S.view = t.dataset.view; document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t ? 'true' : 'false')); renderPreview();
+}));
+
+/* sample logos */
+function sampleClean() {
+  const c = document.createElement('canvas'); c.width = 900; c.height = 640; const x = c.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0, 0, 900, 640);
+  x.fillStyle = '#1c2b63'; x.beginPath(); x.arc(450, 320, 290, 0, Math.PI * 2); x.fill();
+  x.strokeStyle = '#f2b705'; x.lineWidth = 22; x.beginPath(); x.arc(450, 320, 248, 0, Math.PI * 2); x.stroke();
+  x.fillStyle = '#fff'; x.beginPath(); x.moveTo(285, 305); x.lineTo(400, 140); x.lineTo(452, 212); x.lineTo(515, 120); x.lineTo(625, 305); x.closePath(); x.fill();
+  x.fillStyle = '#f2b705'; x.beginPath(); x.moveTo(515, 120); x.lineTo(548, 168); x.lineTo(482, 168); x.closePath(); x.fill();
+  x.fillStyle = '#c62f3b'; x.fillRect(205, 340, 490, 96);
+  x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = '900 76px "Arial Black", Arial, sans-serif'; x.fillText('SUMMIT', 450, 390);
+  x.fillStyle = '#f2b705'; x.font = '700 46px Arial, sans-serif'; x.fillText('OUTFITTERS', 450, 486);
+  return c;
+}
+function sampleProblem() {
+  const c = document.createElement('canvas'); c.width = 900; c.height = 640; const x = c.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0, 0, 900, 640);
+  const g = x.createLinearGradient(170, 0, 730, 0); g.addColorStop(0, '#12a7a3'); g.addColorStop(1, '#7a2fb5');
+  x.fillStyle = g; x.beginPath(); x.arc(450, 320, 270, 0, Math.PI * 2); x.fill();
+  x.strokeStyle = '#222'; x.lineWidth = 2; x.beginPath(); x.arc(450, 320, 296, 0, Math.PI * 2); x.stroke();
+  x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = 'italic 300 118px Georgia, serif'; x.fillText('Aroma', 450, 280);
+  x.font = '400 17px Arial, sans-serif'; x.fillText('HANDCRAFTED SMALL BATCH COFFEE ROASTERS', 450, 372);
+  x.font = '400 13px Arial, sans-serif'; x.fillText('est. 1998  ·  single origin  ·  fair trade', 450, 400);
+  const cols = ['#e63946', '#f4a261', '#e9c46a', '#2a9d8f', '#264653', '#8338ec', '#ff006e', '#3a86ff'];
+  cols.forEach((col, i) => { x.fillStyle = col; x.beginPath(); x.arc(310 + i * 40, 470, 15, 0, Math.PI * 2); x.fill(); });
+  return c;
+}
+$('#sampleA').addEventListener('click', () => { const c = sampleClean(); SRC = { el: c, w: c.width, h: c.height, svg: false }; S.name = 'Sample: clean logo'; run(true); });
+$('#sampleB').addEventListener('click', () => { const c = sampleProblem(); SRC = { el: c, w: c.width, h: c.height, svg: false }; S.name = 'Sample: problem logo'; run(true); });
+
+/* ---------- preview rendering ---------- */
+function hexToRgb(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+function renderPreview() {
+  const A = S.A; if (!A) return;
+  const cv = $('#cv'), stage = $('#stage');
+  if (cv.width !== A.w || cv.height !== A.h) { cv.width = A.w; cv.height = A.h; }
+  const ctx = cv.getContext('2d');
+  cv.setAttribute('aria-label', S.view === 'orig' ? 'Original logo' : S.view === 'map' ? 'Map showing which parts will stitch as fill, satin or are too thin' : 'Simulated embroidery of the logo');
+  $('#dims').textContent = 'Stitched size: ' + fmtLen(S.widthMm) + ' wide by ' + fmtLen(heightMm()) + ' tall.';
+  if (S.view === 'orig') {
+    ctx.clearRect(0, 0, A.w, A.h); ctx.drawImage(A.origCanvas, 0, 0); stage.classList.add('checker');
+    $('#legend').innerHTML = '<span>This is the artwork after cropping and removing the background.</span>'; return;
+  }
+  stage.classList.remove('checker');
+  const w = A.w, h = A.h, labels = A.labels, T = A.T;
+  const mmpp = S.widthMm / w, minW = PROFILE.minW, satMax = 4, map = S.view === 'map';
+  const img = ctx.createImageData(w, h), o = img.data, fab = hexToRgb(S.fabricColor);
+  const pal = A.palette.map(p => p.rgb);
+  const H = Core.hash;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, l = labels[i], j = i * 4;
+    let r, g, b;
+    if (map) { r = 232; g = 236; b = 243; }
+    else { const tw = ((x + y) & 3) < 2 ? 1.035 : 0.965, nz = 0.96 + 0.08 * H(i); r = fab[0] * tw * nz; g = fab[1] * tw * nz; b = fab[2] * tw * nz; }
+    if (l !== 255 && !S.skip[l]) {
+      const ground = S.overlay && A.holes && A.gl[i] === l;
+      const t = (ground ? A.Tg[i] : T[i]) * mmpp;
+      const cls = t >= satMax ? 2 : t >= minW ? 1 : 0;   /* 2 fill, 1 satin, 0 too thin */
+      const edge = x === 0 || y === 0 || x === w - 1 || y === h - 1 || labels[i - 1] !== l || labels[i + 1] !== l || labels[i - w] !== l || labels[i + w] !== l;
+      if (map) {
+        let c;
+        if (cls === 2) c = [79, 124, 255]; else if (cls === 1) c = t < minW * 1.5 ? [240, 165, 0] : [34, 168, 122]; else c = [229, 72, 77];
+        const k = edge ? 0.78 : 1; r = c[0] * k; g = c[1] * k; b = c[2] * k;
+      } else {
+        const base = pal[l]; let m;
+        if (cls === 0) {
+          /* too thin: draw as a single running thread */
+          m = 0.95 + 0.1 * H(x * 7 + y);
+        } else {
+          let P, lineW, Ls, ph, row, along;
+          if (cls === 2) { P = 5; lineW = 3.6; Ls = 26; ph = (x + y) % P; row = Math.floor((x + y) / P); along = (x - y) + H(row) * Ls; }
+          else { P = 4; lineW = 3; Ls = 20; ph = x % P; row = Math.floor(x / P); along = y + H(row + 999) * Ls; }
+          if (ph >= lineW) m = 0.55;
+          else {
+            m = 0.9 + 0.22 * H(row * 7 + 3);
+            const seg = ((along % Ls) + Ls) % Ls; if (seg < 1.3) m *= 0.62;
+            m *= 1 + 0.10 * Math.sin(along * 0.12 + row);
+            if (cls === 1) m *= 1.08;
+          }
+        }
+        if (edge) m *= 0.8;
+        r = base[0] * m; g = base[1] * m; b = base[2] * m;
+      }
+    } else if (map && l !== 255) { if (((x + y) & 7) < 2) { r = 200; g = 205; b = 216; } }
+    o[j] = r > 255 ? 255 : r; o[j + 1] = g > 255 ? 255 : g; o[j + 2] = b > 255 ? 255 : b; o[j + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  $('#legend').innerHTML = map
+    ? '<span><i style="background:#4f7cff"></i>Fill (wider than 0.16 in)</span><span><i style="background:#22a87a"></i>Satin</span><span><i style="background:#f0a500"></i>Satin, close to the limit</span><span><i style="background:#e5484d"></i>Too thin to stitch cleanly</span><span><i style="background:#c8cdd8"></i>Left as fabric</span>'
+    : '<span>Simulated thread texture. Fill areas run diagonally, satin columns run across the stroke, and very thin lines show as a single thread.</span>';
+}
+
+/* ---------- suggestions ---------- */
+function buildTips() {
+  const A = S.A, R = S.R;
+  const tips = [], add = (sev, title, body, action) => tips.push({ sev, title, body, action });
+  const w = S.widthMm, h = heightMm(), fw = fitW();
+  const total = R.tot.stitches * calFactor();
+  const setW = mm => ({ label: 'Set width to ' + fmtLen(mm), fn: () => setWidth(mm) });
+
+  if (Math.min(w, h) < 10) add('bad', 'Too small to stitch', 'The smaller side is under 0.4 in. A needle cannot hold detail at this scale.', w < fw ? setW(Math.min(fw, 20)) : null);
+  if (w > PROFILE.maxW + 0.5 || h > PROFILE.maxH + 0.5) add('warn', 'Larger than a standard hoop', 'At ' + fmtLen(w) + ' by ' + fmtLen(h) + ' this goes past the usual limit of ' + fmtLen(PROFILE.maxW) + ' by ' + fmtLen(PROFILE.maxH) + '.', { label: 'Fit to ' + fmtLen(fw) + ' wide', fn: () => setWidth(fw) });
+
+  if (R.thinLen > 6) {
+    const share = R.thinArea / Math.max(R.area, 1e-9);
+    const sev = (share > 0.10 || R.thinLen > 250) ? 'bad' : 'warn';
+    const req = Math.ceil(PROFILE.minW * A.w / R.minFeaturePx);
+    let body = fmtLen(R.thinLen) + ' of line work is thinner than ' + fmtLen(PROFILE.minW) + ', the finest a needle covers cleanly. Thin lines break up or vanish.';
+    let act = null;
+    if (req <= fw) { body += ' Scaling up lifts them over the limit.'; act = setW(req); }
+    else body += ' Scaling up would exceed the maximum size, so thicken those lines in the artwork instead (to at least ' + fmtLen(PROFILE.minW) + ' at final size).';
+    add(sev, 'Lines are too thin', body, act);
+  }
+  if (R.letters > 0) {
+    const req = R.minLetterHpx ? Math.ceil(4.0 * A.w / R.minLetterHpx) : 0;
+    let body = R.letters + ' letters or marks are shorter than ' + fmtLen(4) + ' (the smallest is ' + fmtLen(R.minLetterMm) + '). Small lettering fills in and turns unreadable.';
+    let act = null;
+    if (req && req <= fw) act = setW(req); else body += ' Enlarge the wording in the artwork or drop it.';
+    add('warn', 'Small lettering', body, act);
+  }
+  if (R.specks > 0) add(R.specks > 3 ? 'warn' : 'note', 'Tiny shapes will be lost', R.specks + ' shape' + (R.specks > 1 ? 's are' : ' is') + ' smaller than ' + fmtLen(1) + '. They cannot be stitched and often come from hairlines or image noise. Clean them out of the artwork.');
+
+  if (A.gradRatio > 0.06) {
+    const photo = A.gradRatio > 0.2;
+    add(photo ? 'bad' : 'warn', photo ? 'Looks like a gradient or photo' : 'Contains gradients',
+      photo ? 'Embroidery uses solid thread colors, so smooth shading cannot be reproduced. Ask for a flat vector version with 3 to 6 solid colors.'
+            : 'Smooth color blends do not stitch. The tool has grouped them into flat bands, but a designer should replace each gradient with 2 or 3 solid tones (or a halftone fill).');
+  }
+
+  const nC = R.colors;
+  if (nC > 12) add('bad', 'Too many colors (' + nC + ')', 'Every color is a thread change and a chance for misregistration. Aim for 6 or fewer.');
+  else if (nC > 6) add('note', nC + ' colors', 'That is workable, but each extra thread color adds machine time and cost. Merging similar shades is the cheapest saving.');
+  const live = []; A.palette.forEach((p, k) => { if (!S.skip[k] && R.per[k].area > 0) live.push(k); });
+  let bp = null;
+  for (let a = 0; a < live.length; a++) for (let b = a + 1; b < live.length; b++) { const d = Core.labDist(A.palette[live[a]].lab, A.palette[live[b]].lab); if (d < 30 && (!bp || d < bp.d)) bp = { a: live[a], b: live[b], d }; }
+  if (bp) add('warn', 'Two colors are almost the same', A.palette[bp.a].hex + ' and ' + A.palette[bp.b].hex + ' are hard to tell apart in thread. Merging them saves a color change.', { label: 'Merge them', fn: () => { S.skip.splice(bp.b, 1); Core.mergeColors(S.A, bp.a, bp.b); update(); } });
+
+  Core.shadeCandidates(A).forEach(({ k, g }) => {
+    if (S.skip[k] || S.skip[g]) return;
+    const hk = A.palette[k].hex.toUpperCase(), hg = A.palette[g].hex.toUpperCase(), kk = k, gg = g;
+    add('warn', hk + ' sits inside ' + hg, 'It is surrounded by ' + hg + ' and is the same hue, so it looks like shading or an inlay, not a separate color. Stitched on its own it adds a thread color and extra stitches. Merge it if it should just be ' + hg + '.',
+      { label: 'Merge into ' + hg, fn: () => { S.skip.splice(kk, 1); Core.mergeColors(S.A, gg, kk); update(); } });
+  });
+  const warnAt = PROFILE.warn, badAt = PROFILE.bad;
+  if (total > warnAt) {
+    const sev = total > badAt ? 'bad' : 'warn';
+    let body = 'About ' + fmt(total) + ' stitches is heavy (comfortable is under ' + fmt(warnAt) + ').';
+    let big = -1, bs = 0; R.per.forEach((p, k) => { if (!S.skip[k] && p.st > bs) { bs = p.st; big = k; } });
+    let act = null;
+    if (big >= 0 && bs > total / calFactor() * 0.25 && live.length > 1) {
+      const saved = bs * calFactor();
+      body += ' The biggest single cost is ' + A.palette[big].hex + ' at ' + fmt(saved) + ' stitches. If that matches your fabric color, leave it unstitched.';
+      act = { label: 'Leave ' + A.palette[big].hex + ' as fabric', fn: () => { S.skip[big] = true; update(); } };
+    }
+    const sw = w * Math.sqrt(warnAt / total);
+    if (!act && sw >= 10) act = setW(Math.floor(sw));
+    add(sev, 'High stitch count', body, act);
+  }
+  if (A.bgLab) live.forEach(k => {
+    if (Core.labDist(A.palette[k].lab, A.bgLab) < 20) {
+      const kk = k;
+      add('note', A.palette[k].hex + ' matches your logo background', 'If the garment is this color, that area should be bare fabric and costs nothing. If the garment is darker, keep it as thread. It currently adds ' + fmt(R.per[k].st * calFactor()) + ' stitches.', { label: 'Leave as fabric', fn: () => { S.skip[kk] = true; update(); } });
+    }
+  });
+
+  if (!tips.some(t => t.sev === 'bad' || t.sev === 'warn')) add('ok', 'Ready to send to a digitizer', 'Give them the size (' + fmtLen(w) + ' by ' + fmtLen(h) + ') and the ' + nC + ' thread colors. Ask for underlay and pull compensation suited to the garment.');
+  return tips;
+}
+
+/* ---------- results rendering ---------- */
+const ICONS = {
+  ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-7"/></svg>',
+  warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg>',
+  bad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M16 8l-8 8"/></svg>'
+};
+/* ---------- digitizing plan (Wilcom EmbroideryStudio tool names) ---------- */
+function renderPlan() {
+  const A = S.A, R = S.R, box = $('#planList'); if (!A || !R) return;
+  /* a color is a "base layer" only when shapes sitting on it make up a real share of it (not just letter counters) */
+  const ground = new Set();
+  if (A.holes) {
+    const hole = A.palette.map(() => 0);
+    for (let i = 0; i < A.labels.length; i++) if (A.labels[i] !== 255 && A.gl[i] !== A.labels[i]) hole[A.gl[i]]++;
+    hole.forEach((c, k) => { if (c > 0.05 * (c + A.counts[k])) ground.add(k); });
+  }
+  const rows = [];
+  A.palette.forEach((p, k) => { if (!S.skip[k] && (R.per[k].area > 0 || R.per[k].fill > 0)) rows.push(k); });
+  rows.sort((a, b) => ((ground.has(b) ? 1 : 0) - (ground.has(a) ? 1 : 0)) || (R.per[b].area - R.per[a].area));
+  const sq = mm2 => (mm2 / 645.16).toFixed(2) + ' sq in';
+  box.innerHTML = rows.map((k, n) => {
+    const p = A.palette[k], r = R.per[k], parts = [], isGround = ground.has(k);
+    if (r.fill > 1) {
+      const tool = isGround ? (S.overlay ? 'Tatami Fill Object (ignores holes)' : 'Tatami Fill Object with Holes') : 'Tatami Fill Object';
+      parts.push([r.fill, '<b>' + tool + '</b>: ' + sq(r.fill) + ', about ' + fmt(r.stFill + r.stOut) + ' stitches. Row spacing about ' + (Core.TATAMI_DEFAULT * S.set.fill / 100).toFixed(2) + ' mm. Edge-run underlay plus a light crossing underlay.' + (r.stOut > 100 ? ' Dense satin border on the edge.' : '')]);
+    }
+    if (r.satin > 1) parts.push([r.satin, '<b>Turning Satin Object</b>: ' + sq(r.satin) + ', about ' + fmt(r.stSatin) + ' stitches. Spacing about ' + (Core.satinPreset(1.5) * S.set.satin / 100).toFixed(2) + ' mm. Edge-run and zigzag underlay. Add pull compensation so the letters stay crisp.']);
+    if (r.thin > 0.5) parts.push([r.thin, '<b>Centerline Run Object, or widen to a satin column</b>: ' + sq(r.thin) + ', about ' + fmt(r.stThin) + ' stitches. Narrower than ' + fmtLen(PROFILE.minW) + '. Digitizers usually widen these, so check the fine lettering.']);
+    /* hide slivers under 0.03 sq in unless that is all there is */
+    const big = parts.filter(q => q[0] >= 19.4); const show = big.length ? big : parts.slice().sort((a, b) => b[0] - a[0]).slice(0, 1);
+    const when = isGround && S.overlay ? 'Stitch first: base layer under the overlapping shapes' : n === 0 ? 'Stitch first' : 'Stitch next';
+    return '<li class="prow"><div class="sw" style="background:' + p.hex + '"></div><div><div class="ph"><b>' + (n + 1) + '. ' + p.hex.toUpperCase() + '</b> &middot; ' + when + '</div><ul class="pp"><li>' + show.map(q => q[1]).join('</li><li>') + '</li></ul></div></li>';
+  }).join('');
+}
+
+function level() { return S.tips.some(t => t.sev === 'bad') ? 'bad' : S.tips.some(t => t.sev === 'warn') ? 'warn' : 'ok'; }
+function round100(n) { return Math.round(n / 100) * 100; }
+function rangeText() { const t = S.R.tot.stitches * calFactor(); return fmt(round100(t * 0.85)) + ' to ' + fmt(round100(t * 1.2)); }
+function minutes() { const R = S.R; return (R.tot.stitches * calFactor()) / 700 + R.colors * 0.45; }
+function fmtMin(m) { return m < 1 ? 'under a minute' : m < 90 ? Math.round(m) + ' min' : (m / 60).toFixed(1) + ' hr'; }
+
+function renderResults() {
+  const A = S.A, R = S.R;
+  const lvl = level(), total = R.tot.stitches * calFactor(), h = heightMm();
+  const bad = S.tips.filter(t => t.sev === 'bad'), warn = S.tips.filter(t => t.sev === 'warn');
+  const title = lvl === 'ok' ? 'Ready to digitize' : lvl === 'warn' ? 'Possible, with changes' : 'Not practical as drawn';
+  const why = lvl === 'ok'
+    ? 'This logo should embroider cleanly at ' + fmtLen(S.widthMm) + ' by ' + fmtLen(h) + '.'
+    : lvl === 'warn'
+      ? 'It can be stitched at this size once you sort out ' + (warn.length === 1 ? 'the issue' : 'the ' + warn.length + ' issues') + ' below.'
+      : (bad.map(t => t.title.toLowerCase()).slice(0, 2).join(' and ')).replace(/^./, c => c.toUpperCase()) + '. Fix ' + (bad.length > 1 ? 'these' : 'this') + ' before sending it to a digitizer.';
+  $('#verdict').className = 'verdict ' + lvl;
+  $('#verdict').innerHTML = ICONS[lvl] + '<div class="vt"><h2>' + title + '</h2><p>' + esc(why) + '</p></div>';
+
+  $('#metrics').innerHTML =
+    '<div class="big"><div class="k">Estimated stitches</div><div class="v">' + fmt(Math.round(total / 10) * 10) + '</div><div class="s">Likely range ' + rangeText() + '</div></div>' +
+    '<div><div class="k">Stitched size</div><div class="v">' + esc(fmtLen(S.widthMm)) + '</div><div class="s">by ' + esc(fmtLen(h)) + ' tall</div></div>' +
+    '<div><div class="k">Thread colors</div><div class="v">' + R.colors + '</div><div class="s">' + (R.colors <= 6 ? 'a comfortable count' : R.colors <= 12 ? 'on the high side' : 'too many') + '</div></div>' +
+    '<div><div class="k">Machine time</div><div class="v">' + fmtMin(minutes()) + '</div><div class="s">one head, 700 stitches/min</div></div>';
+
+  const cf = calFactor(), parts = [
+    ['Fill', R.tot.fill, '#4f7cff'], ['Satin', R.tot.satin, '#22a87a'], ['Fine lines', R.tot.thin, '#e5484d'], ['Outlines', R.tot.out, '#8b93a7']
+  ];
+  const sum = parts.reduce((s, p) => s + p[1], 0) || 1;
+  $('#typeBar').innerHTML = parts.map(p => '<span style="width:' + (p[1] / sum * 100).toFixed(2) + '%;background:' + p[2] + '" title="' + p[0] + '"></span>').join('');
+  $('#typeLegend').innerHTML = parts.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + ': ' + fmt(p[1] * cf) + ' (' + Math.round(p[1] / sum * 100) + '%)</span>').join('');
+
+  $('#typeNote').textContent = R.overlay && R.under > 1 ? 'Includes about ' + fmt(R.under) + ' stitches of base color laid under overlapping shapes, the way your digitizer builds them.' : '';
+  const totalPx = A.counts.reduce((s, c) => s + c, 0) || 1;
+  $('#palette').innerHTML = A.palette.map((p, k) => {
+    const off = S.skip[k];
+    return '<li class="crow' + (off ? ' off' : '') + '"><div class="sw" style="background:' + p.hex + '"></div>' +
+      '<div class="m"><b>' + p.hex.toUpperCase() + '</b><span>' + Math.round(A.counts[k] / totalPx * 100) + '% of the design</span>' + (A.palette.length > 1 ? '<select class="mg" data-k="' + k + '" aria-label="Merge ' + p.hex.toUpperCase() + ' into another color"><option value="">Merge into...</option>' + A.palette.map((q, j) => j === k ? '' : '<option value="' + j + '">' + q.hex.toUpperCase() + '</option>').join('') + '</select>' : '') + '</div>' +
+      '<div class="cs">' + (off ? 'no stitches' : fmt(R.per[k].st * cf) + ' stitches') + '</div>' +
+      '<label><input type="checkbox" data-k="' + k + '"' + (off ? '' : ' checked') + '> Stitch</label></li>';
+  }).join('');
+  $('#palette').querySelectorAll('select.mg').forEach(sel => sel.addEventListener('change', () => {
+    const k = +sel.dataset.k, j = sel.value === '' ? -1 : +sel.value; if (j < 0) return;
+    S.skip.splice(k, 1); Core.mergeColors(S.A, j, k); update();
+  }));
+  $('#palette').querySelectorAll('input').forEach(inp => inp.addEventListener('change', () => { S.skip[+inp.dataset.k] = !inp.checked; update(); }));
+
+  renderPlan();
+  const order = { bad: 0, warn: 1, note: 2, ok: 3 };
+  const sorted = S.tips.slice().sort((a, b) => order[a.sev] - order[b.sev]);
+  $('#tips').innerHTML = sorted.map((t, i) => '<li class="tip ' + t.sev + '"><div class="tt"><h3>' + esc(t.title) + '</h3><p>' + esc(t.body) + '</p></div>' + (t.action ? '<button class="btn sm" type="button" data-a="' + i + '">' + esc(t.action.label) + '</button>' : '') + '</li>').join('');
+  $('#tips').querySelectorAll('button[data-a]').forEach(b => b.addEventListener('click', () => sorted[+b.dataset.a].action.fn()));
+  $('#openNote').textContent = A.openAreas ? 'Left ' + A.openAreas + ' enclosed empty area' + (A.openAreas > 1 ? 's' : '') + ' unstitched (the space inside frames and shapes).' : '';
+}
+
+/* ---------- copy summary ---------- */
+$('#copy').addEventListener('click', () => {
+  const R = S.R, A = S.A; if (!R) return;
+  const lines = ['Embroidery check: ' + (S.name || 'logo'), 'Result: ' + (level() === 'ok' ? 'Ready to digitize' : level() === 'warn' ? 'Possible, with changes' : 'Not practical as drawn'),
+    'Size: ' + fmtLen(S.widthMm) + ' x ' + fmtLen(heightMm()),
+    'Estimated stitches: ' + fmt(R.tot.stitches * calFactor()) + ' (range ' + rangeText() + ')', 'Thread colors (' + R.colors + '): ' + A.palette.filter((_, k) => !S.skip[k] && R.per[k].area > 0).map(p => p.hex).join(', '), '',
+    'Notes:'].concat(S.tips.map(t => '- ' + t.title + ': ' + t.body));
+  const text = lines.join('\n');
+  const done = ok => { $('#msg2').textContent = ok ? 'Summary copied.' : 'Copy was blocked. Select the notes and copy them manually.'; };
+  try { navigator.clipboard.writeText(text).then(() => done(true), () => fallback()); } catch (e) { fallback(); }
+  function fallback() { try { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); document.body.removeChild(ta); done(ok); } catch (e) { done(false); } }
+});
+
+syncInputs();
+})();
+</script>
+</body>
+</html>
